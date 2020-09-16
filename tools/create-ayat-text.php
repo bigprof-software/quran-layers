@@ -22,21 +22,21 @@
 
 	echo "Please wait while extracting ayat from source file '{$file}'\n";
 
-	foreach ($ayatResolved as $sura => $ayat)
-		foreach ($ayat as $ayaNum => $text) {
-			$ayaPath = sprintf(__DIR__ . '/../%03d/%03d', $sura, $ayaNum);
+	AyatMap::forEachAya(function($suraNum, $ayaNum) use ($ayatResolved, $path) {
+		$text = $ayatResolved[$suraNum][$ayaNum];
+		$ayaPath = sprintf(__DIR__ . '/../api/%03d/%03d', $suraNum, $ayaNum);
 
-			echo "Writing to {$ayaPath}/{$path}: ";
+		echo "Writing to {$ayaPath}/{$path}: ";
 
-			if(@mkdir("{$ayaPath}/{$path}") || is_dir("{$ayaPath}/{$path}")) {
-				file_put_contents("{$ayaPath}/{$path}/index.html", $text);
-				echo "OK\n";
-			} else {
-				echo "FAILED!\n";
-			}
-
-			if($path == 'text')
-				@file_put_contents("{$ayaPath}/index.html", $text);
+		if(@mkdir("{$ayaPath}/{$path}") || is_dir("{$ayaPath}/{$path}")) {
+			file_put_contents("{$ayaPath}/{$path}/index.html", $text);
+			echo "OK\n";
+		} else {
+			echo "FAILED!\n";
 		}
+
+		if($path == 'text')
+			@file_put_contents("{$ayaPath}/index.html", $text);
+	});
 
 	echo "Done. Ayat extracted to /{sura}/{aya}/{$path}\n";
