@@ -1,11 +1,16 @@
 <?php
 
-	/* Usage: php create-ayat-text.php source-file path */
-	
 	include('autoloader.php');
 
-	$sourceFile = isset($argv[1]) ? $argv[1] : 'quran-text.txt';
-	$path = isset($argv[2]) ? $argv[2] : 'text';
+	if(!isset($argv[1]) || !isset($argv[2]))
+		die(
+			"Usage: php create-ayat-text.php source-file path\n" .
+			"Example:\n" .
+			"php create-ayat-text.php quran-text.txt text\n"
+		);
+
+	$sourceFile = $argv[1];
+	$path = $argv[2];
 
 	$file = __DIR__ . '/../resources/' . $sourceFile;
 	$ayat = @file($file);
